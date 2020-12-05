@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 
-export default class Login extends Component {
-    render() {
+const Footer = () => {
+    
         return (
             <div>
                 
             </div>
         )
-    }
 }
+
+export default Footer

@@ -32,6 +32,15 @@ namespace Reactivities.API
 
             services.AddAutoMapper(typeof(MappingProfile).Assembly);
 
+            services.AddCors(options => {
+                options.AddPolicy("BasePolicy", policy => {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod();
+                });
+            });
+
             services.AddDocumentationServices("Reactivities API");
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -55,11 +64,13 @@ namespace Reactivities.API
                 c.RoutePrefix = string.Empty;
             });
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("BasePolicy");
 
             app.UseEndpoints(endpoints =>
             {
