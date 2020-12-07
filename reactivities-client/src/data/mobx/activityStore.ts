@@ -12,8 +12,8 @@ class ActivityStore {
     @action loadActivities = () => {
         this.isLoading = true;
         Activities.list()
-            .then(activities => {
-                activities.forEach((activity) => {
+            .then(pagedActivities => {
+                pagedActivities.activities.forEach((activity) => {
                     this.activities.push(activity);
                 })
             })

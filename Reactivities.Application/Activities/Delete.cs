@@ -1,8 +1,10 @@
 using AutoMapper;
 using MediatR;
+using Reactivities.Application.Errors;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -29,13 +31,13 @@ namespace Reactivities.Application.Activities
             {
                 var existingActivity = _context.Activities.Find(request.Id);
                 if (existingActivity == null) {
-                    throw new Exception("Activity does not exist");
+                    throw new RestException(HttpStatusCode.NotFound, "Activity does not exist" );
                 }
 
                 _context.Activities.Remove(existingActivity);
                 var success = await _context.SaveChangesAsync() > 0;
                 if (!success) {
-                    throw new Exception("Problem saving changes");
+                    throw new RestException(HttpStatusCode.InternalServerError, "Problem saving changes");
                 }
                 return existingActivity;
             }

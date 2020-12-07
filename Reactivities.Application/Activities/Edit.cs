@@ -1,10 +1,9 @@
 using AutoMapper;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Reactivities.Domain.Models;
+using Reactivities.Application.Errors;
 using Reactivities.Persistence;
 using System;
-using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -38,7 +37,7 @@ namespace Reactivities.Application.Activities
                 var existingActivity = await _context.Activities.FindAsync(request.Id);
                 if (existingActivity == null)
                 {
-                    throw new Exception("Activity does not exist");
+                    throw new RestException(HttpStatusCode.NotFound, "Activity does not exist");
                 }
 
                 existingActivity.Title = request.Title ?? existingActivity.Title;
@@ -48,11 +47,11 @@ namespace Reactivities.Application.Activities
                 existingActivity.City = request.City ?? existingActivity.City;
                 existingActivity.Venue = request.Venue ?? existingActivity.Venue;
 
-
-                var success = await _context.SaveChangesAsync() > 0;
-                if (!success) {
+                var isSaved = (await _context.SaveChangesAsync()) > 0;
+                if (!isSaved) {
                     throw new Exception("Problem saving changes");
                 }
+
                 return Unit.Value;
             }
         }

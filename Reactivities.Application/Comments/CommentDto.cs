@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Reactivities.Application.Comments.Dtos
+namespace Reactivities.Application.Comments
 {
     public class CommentDto
     {

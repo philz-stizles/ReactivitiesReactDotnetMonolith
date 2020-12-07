@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
-import { IActivity } from '../models/IActivity'
+import { IActivity, IPagedActivity } from '../models/IActivity'
 
 axios.defaults.baseURL = 'http://localhost:5000/api'
 
@@ -13,10 +13,10 @@ const requests = {
 }
 
 const Activities = {
-    list: (): Promise<IActivity[]> => requests.get('/Activities'),
+    list: (): Promise<IPagedActivity> => requests.get('/Activities'),
     details: (id: string): Promise<IActivity> => requests.get(`/Activities/${id}`),
-    create: (activity:IActivity) => requests.post('/Activities', activity),
-    update: (activity:IActivity) => requests.put(`/Activities/${activity.id}`, activity),
+    create: (activity: IActivity) => requests.post('/Activities', activity),
+    update: (activity: IActivity) => requests.put(`/Activities/${activity.id}`, activity),
     delete: (id: string) => requests.delete(`/Activities/${id}`)
 }
 

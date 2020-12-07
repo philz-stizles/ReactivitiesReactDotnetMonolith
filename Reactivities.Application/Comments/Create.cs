@@ -1,7 +1,6 @@
 using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Reactivities.Application.Comments.Dtos;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 using System;
