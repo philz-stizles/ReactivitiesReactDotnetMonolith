@@ -14,6 +14,7 @@ using Reactivities.Application.Interfaces;
 using Reactivities.Application.Mappings;
 using Reactivities.Application.ServiceConfigurations;
 using Reactivities.Domain.Models;
+using Reactivities.Infrastructure.Security;
 using Reactivities.Persistence;
 
 namespace Reactivities.API
@@ -30,7 +31,9 @@ namespace Reactivities.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IJWTGenerator, IJWTGenerator>();
+            services.AddScoped<IJWTGenerator, JWTGenerator>();
+            services.AddScoped<IUserAccessor, UserAccessor>();
+
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
 
             services.AddMediatR(typeof(List.Handler).Assembly);
@@ -69,7 +72,9 @@ namespace Reactivities.API
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
 
             services.AddAuthenticationServices(Configuration);
-            
+
+            services.AddAuthorizationServices(Configuration);
+
             services.AddControllers();
         }
 
@@ -93,10 +98,12 @@ namespace Reactivities.API
             // app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors("BasePolicy");
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors("BasePolicy");
+            // app.UseCors("BasePolicy");
 
             app.UseEndpoints(endpoints =>
             {
