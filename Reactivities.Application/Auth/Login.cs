@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Reactivities.Application.Errors;
 using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Models;
-using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,10 +46,10 @@ namespace Reactivities.Application.Auth
             public async Task<LoggedInUserDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var existingUser = await _userMgr.FindByEmailAsync(request.Email);
-                if (existingUser == null) throw new RestException(HttpStatusCode.BadRequest, "Unauthorized access");
+                if (existingUser == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
 
                 var result = await _signInMgr.CheckPasswordSignInAsync(existingUser, request.Password, false);
-                if (!result.Succeeded) throw new RestException(HttpStatusCode.BadRequest, "Unauthorized access"); ;
+                if (!result.Succeeded) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access"); ;
                 
                 var userDetails = _mapper.Map<UserDto>(existingUser);
                 return new LoggedInUserDto

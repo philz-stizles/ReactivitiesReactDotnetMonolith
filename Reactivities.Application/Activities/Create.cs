@@ -2,11 +2,14 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Reactivities.Application.Errors;
+using Reactivities.Application.Interfaces;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -31,13 +34,13 @@ namespace Reactivities.Application.Activities
         public class Handler : IRequestHandler<Command>
         {
             private readonly AppDbContext _context;
-            private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly IUserAccessor _userAccessor;
             private readonly IMapper _mapper;
 
-            public Handler(AppDbContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+            public Handler(AppDbContext context, IUserAccessor userAccessor, IMapper mapper)
             {
                 _context = context;
-                _httpContextAccessor = httpContextAccessor;
+                _userAccessor = userAccessor;
                 _mapper = mapper;
             }
 
@@ -45,14 +48,11 @@ namespace Reactivities.Application.Activities
             {
                 _context.Activities.Add(_mapper.Map<Activity>(request));
 
-                // var user = _context.Users.SingleOrDefaultAsync(u => u.UserName = _httpContextAccessor.HttpContext.User.);
-                // if (user == null)
-                // {
-                    // throw new Exception("Problem saving changes");
-                // }
-                _context.UserActivities.Add(new UserActivity { 
+                var user = await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
+                if (user == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
 
-                });
+                // _context.UserActivities.Add(new UserActivity { 
+
 
                 var success = await _context.SaveChangesAsync() > 0;
                 if (!success) {
