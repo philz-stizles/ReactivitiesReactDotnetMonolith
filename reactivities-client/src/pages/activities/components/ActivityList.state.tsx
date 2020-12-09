@@ -7,9 +7,10 @@ interface IProps {
     activities: IActivity[]
     onActivitySelect: (id: string) => void
     onActivityDelete: (id: string) => void
+    isSubmitting: boolean
 }
 
-const ActivityListState: React.FC<IProps> = ({ activities, onActivitySelect, onActivityDelete}) => {
+const ActivityListState: React.FC<IProps> = ({ activities, onActivitySelect, onActivityDelete, isSubmitting }) => {
     return (
         <Item.Group divided>
             {activities.map(activity => {
@@ -17,7 +18,8 @@ const ActivityListState: React.FC<IProps> = ({ activities, onActivitySelect, onA
                     key={activity.id} 
                     activity={activity} 
                     onActivitySelect={onActivitySelect}
-                    onActivityDelete={onActivityDelete} />
+                    onActivityDelete={onActivityDelete} 
+                    isSubmitting={isSubmitting}/>
             })}
         </Item.Group>
     )

@@ -6,9 +6,10 @@ interface IProps {
     activity: IActivity
     onActivitySelect: (id: string) => void;
     onActivityDelete: (id: string) => void;
+    isSubmitting: boolean
 }
 
-const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, onActivityDelete }) => {
+const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, onActivityDelete, isSubmitting }) => {
     return (
         <Segment.Group>
             <Segment>
@@ -34,6 +35,7 @@ const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, o
                     onClick={() => onActivitySelect(activity.id)} 
                 ></Button>
                 <Button 
+                    loading={isSubmitting}
                     floated='right' 
                     content='Delete' 
                     color='red'

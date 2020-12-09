@@ -9,9 +9,10 @@ interface IProps {
     onSetEditMode: (editMode: boolean) => void
     onCreateActivity: (activity: IActivity) => void
     onEditActivity: (activity: IActivity) => void
+    isSubmitting: boolean
 }
 
-const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity }) => {
+const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity, isSubmitting }) => {
     const [activityFormState, setActivityForm] = useState((activity) ? activity : {
         id: '',
         title: '',
@@ -75,7 +76,7 @@ const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreate
                     value={activityFormState.venue} 
                     name='venue' 
                     onChange={handleChange}/>
-                <Button float='right' positive type='submit' content='Submit' />
+                <Button loading={isSubmitting} float='right' positive type='submit' content='Submit' />
                 <Button float='right' type='button' content='Cancel' onClick={() => onSetEditMode(false)} />
             </Form>
         </Segment>

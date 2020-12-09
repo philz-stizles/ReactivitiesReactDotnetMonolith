@@ -21,6 +21,7 @@ const ActivityDashboardState = () => {
 
     const [editMode, setEditMode] = useState(false)
     const [isLoading, setLoading] = useState(true)
+    const [submitting, setSubmitting] = useState(false)
     
 
     useEffect(() => {
@@ -61,6 +62,7 @@ const ActivityDashboardState = () => {
     }
 
     const handleCreateActivity = (activity: IActivity) => {
+        setSubmitting(true)
         Activities.create(activity)
             .then(response => {
                 setActivityState({
@@ -68,10 +70,11 @@ const ActivityDashboardState = () => {
                     selectedActivity: activityState.selectedActivity
                 });
                 setEditMode(false)
-            })
+            }).then(() => setSubmitting(false))
     }
 
     const handleEditActivity = (activity: IActivity) => {
+        setSubmitting(true)
         Activities.update(activity)
             .then(response => {
                 setActivityState({
@@ -79,18 +82,19 @@ const ActivityDashboardState = () => {
                     selectedActivity: activity
                 })
                 setEditMode(false)
-            })
+            }).then(() => setSubmitting(false))
     }
 
     const handleDeleteActivity = (id: string) => {
+        setSubmitting(true)
         Activities.delete(id)
             .then(response => {
                 setActivityState({
                     activities: [...activityState.activities.filter(a => a.id !== id)],
-                    selectedActivity: activityState.selectedActivity
+                    selectedActivity: (activityState.selectedActivity?.id == id) ? null : activityState.selectedActivity
                 })
                 setEditMode(false)
-            })
+            }).then(() => setSubmitting(false))
     }
 
     if(isLoading) return <LoadingComponent content="Loading activities"/>
@@ -104,7 +108,8 @@ const ActivityDashboardState = () => {
                     <ActivityList 
                         activities={activityState.activities} 
                         onActivitySelect={handleSelectActivity} 
-                        onActivityDelete={handleDeleteActivity} />
+                        onActivityDelete={handleDeleteActivity}
+                        isSubmitting={submitting}  />
                 </Grid.Column>
                 <Grid.Column width={6}>
                     
@@ -126,7 +131,8 @@ const ActivityDashboardState = () => {
                                 activity={activityState.selectedActivity!} 
                                 onCreateActivity={handleCreateActivity}
                                 onEditActivity={handleEditActivity}
-                                onSetEditMode={handleSetEditMode} />
+                                onSetEditMode={handleSetEditMode} 
+                                isSubmitting={submitting}/>
                         </Fragment>
                     }
                 </Grid.Column>

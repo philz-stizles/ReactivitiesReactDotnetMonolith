@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Activities;
 
 namespace Reactivities.API.Controllers
 {
-    [Authorize]
+    // [Authorize]
     public class ActivitiesController : BaseController
     {
         [HttpGet]
