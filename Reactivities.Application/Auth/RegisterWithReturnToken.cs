@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Reactivities.Application.Auth
 {
-    public class Register
+    public class RegisterWithReturnToken
     {
         public class Command : IRequest<LoggedInUserDto>
         {

@@ -44,5 +44,19 @@ namespace Reactivities.API.Controllers
             var result = await Mediator.Send(new Delete.Command { Id = id });
             return Ok(new { Status = true, Data = result, Message = "Activity deleted successful"});
         }
+
+        [HttpPost("{id}/Attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            var result = await Mediator.Send(new Attend.Command { Id = id });
+            return Ok(new { Status = true, Data = result, Message = "Attendance created Successfully" });
+        }
+
+        [HttpDelete("{id}/Attend")]
+        public async Task<IActionResult> UnAttend(Guid id)
+        {
+            var result = await Mediator.Send(new UnAttend.Command { Id = id });
+            return Ok(new { Status = true, Data = result, Message = "You have successfully unattended an activity" });
+        }
     }
 }

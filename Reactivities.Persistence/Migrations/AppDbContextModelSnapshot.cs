@@ -199,6 +199,9 @@ namespace Reactivities.Persistence.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Bio")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -284,6 +287,29 @@ namespace Reactivities.Persistence.Migrations
                     b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("Reactivities.Domain.Models.UserActivity", b =>
@@ -397,16 +423,23 @@ namespace Reactivities.Persistence.Migrations
                         .HasForeignKey("AuthorId");
                 });
 
+            modelBuilder.Entity("Reactivities.Domain.Models.Photo", b =>
+                {
+                    b.HasOne("Reactivities.Domain.Models.AppUser", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("Reactivities.Domain.Models.UserActivity", b =>
                 {
                     b.HasOne("Reactivities.Domain.Models.Activity", "Activity")
-                        .WithMany("Users")
+                        .WithMany("ActivityUsers")
                         .HasForeignKey("ActivityId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Reactivities.Domain.Models.AppUser", "AppUser")
-                        .WithMany("Activities")
+                        .WithMany("UserActivities")
                         .HasForeignKey("AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

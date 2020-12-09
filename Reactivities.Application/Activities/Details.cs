@@ -1,5 +1,6 @@
 using AutoMapper;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Reactivities.Persistence;
 using System;
 using System.Threading;
@@ -26,7 +27,9 @@ namespace Reactivities.Application.Activities
 
             public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities
+                    .Include(a => a.ActivityUsers).ThenInclude(au => au.AppUser)
+                    .SingleOrDefaultAsync(activity => activity.Id == request.Id);
                 return _mapper.Map<ActivityDto>(activity);
             }
         }

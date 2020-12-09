@@ -1,4 +1,4 @@
-﻿namespace Reactivities.Application.Configs
+﻿namespace Reactivities.Infrastructure.Photos
 {
     public class CloudinarySettings
     {

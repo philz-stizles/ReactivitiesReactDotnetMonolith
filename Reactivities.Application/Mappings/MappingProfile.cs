@@ -20,8 +20,14 @@ namespace Reactivities.Application.Mappings
             CreateMap<Activity, ActivityDto>().ReverseMap();
 
             // AppUser
-            CreateMap<Register.Command, AppUser>();
+            CreateMap<RegisterWithReturnToken.Command, AppUser>();
             CreateMap<AppUser, UserDto>().ReverseMap();
+            CreateMap<UserActivity, AttendeeDto>()
+                .ForMember(ad => ad.DisplayName, opt => opt.MapFrom(ua => ua.AppUser.DisplayName))
+                .ForMember(ad => ad.UserName, opt => opt.MapFrom(ua => ua.AppUser.UserName));
+
+            CreateMap<AppUser, User.UserProfileDto>()
+                .ForMember(up => up.Image, opt => opt.MapFrom(au => au.Photos.FirstOrDefault(p => p.IsMain).Url));
         }
     }
 }

@@ -46,6 +46,7 @@ namespace Reactivities.Application.Activities
                 var query = _context.Activities.AsQueryable();
 
                 var activities = await query
+                .Include(a => a.ActivityUsers).ThenInclude(au => au.AppUser)
                 .Skip(request.Skip ?? 0)
                 .Take(request.Take ?? 10) 
                 .ToListAsync();

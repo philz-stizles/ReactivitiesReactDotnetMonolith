@@ -9,11 +9,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Reactivities.API.Middleware;
 using Reactivities.API.SignalR;
 using Reactivities.Application.Activities;
-using Reactivities.Application.Configs;
 using Reactivities.Application.Interfaces;
 using Reactivities.Application.Mappings;
 using Reactivities.Application.ServiceConfigurations;
 using Reactivities.Domain.Models;
+using Reactivities.Infrastructure.Email;
+using Reactivities.Infrastructure.Photos;
 using Reactivities.Infrastructure.Security;
 using Reactivities.Persistence;
 
@@ -33,8 +34,11 @@ namespace Reactivities.API
         {
             services.AddScoped<IJWTGenerator, JWTGenerator>();
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.AddScoped<IEmailSender, EmailSender>();
 
             services.Configure<CloudinarySettings>(Configuration.GetSection("CloudinarySettings"));
+            services.Configure<SendGridSettings>(Configuration.GetSection("SendGridSettings"));
 
             services.AddMediatR(typeof(List.Handler).Assembly);
 
@@ -53,7 +57,7 @@ namespace Reactivities.API
 
             // services.AddDocumentationServices("Reactivities API");
             services.AddDbContext<AppDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
 
             // AddIdentityCore allows us to have control over the Identity configuration - so as to use JWT Tokens 
             // Unlike AddIdentity that would use the default identity configuration which would setup to use cookies
@@ -63,6 +67,8 @@ namespace Reactivities.API
                 opt.Password.RequireLowercase = true;
                 opt.Password.RequireUppercase = true;
                 opt.Password.RequireNonAlphanumeric = true;
+
+                // opt.SignIn.RequireConfirmedEmail = true;
             });
             
             var identityBuilder = new IdentityBuilder(builder.UserType, typeof(Role), builder.Services);
@@ -70,6 +76,7 @@ namespace Reactivities.API
             identityBuilder.AddRoleValidator<RoleValidator<Role>>();
             identityBuilder.AddRoleManager<RoleManager<Role>>();
             identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+            // identityBuilder.AddDefaultTokenProviders();
 
             services.AddAuthenticationServices(Configuration);
 

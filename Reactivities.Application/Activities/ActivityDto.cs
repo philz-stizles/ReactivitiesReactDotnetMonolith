@@ -17,7 +17,7 @@ namespace Reactivities.Application.Activities
         public virtual ICollection<CommentDto> Comments { get; set; }
 
         [JsonPropertyName("attendees")]
-        public virtual ICollection<AttendeeDto> Users { get; set; }
+        public virtual ICollection<AttendeeDto> ActivityUsers { get; set; }
     }
 
     public class AttendeeDto

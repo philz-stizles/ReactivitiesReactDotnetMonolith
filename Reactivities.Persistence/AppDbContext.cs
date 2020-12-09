@@ -9,6 +9,7 @@ namespace Reactivities.Persistence
         public DbSet<Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
@@ -40,12 +41,12 @@ namespace Reactivities.Persistence
 
             builder.Entity<UserActivity>()
                 .HasOne(e => e.AppUser)
-                .WithMany(u => u.Activities)
+                .WithMany(u => u.UserActivities)
                 .HasForeignKey(e => e.AppUserId);
 
             builder.Entity<UserActivity>()
                 .HasOne(e => e.Activity)
-                .WithMany(a => a.Users)
+                .WithMany(a => a.ActivityUsers)
                 .HasForeignKey(e => e.ActivityId);
         }
     }
