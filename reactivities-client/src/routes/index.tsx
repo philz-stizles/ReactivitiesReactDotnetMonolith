@@ -4,10 +4,10 @@ import Contact from '../pages/Contact'
 import About from '../pages/About'
 import Home from '../pages/Home'
 import Auth from '../pages/Auth'
-import ActivityDetailState from '../pages/activities/components/ActivityDetail.state'
-import ActivityCreateState from '../pages/activities/ActivityCreate.state'
-import ActivityEditState from '../pages/activities/ActivityEdit.state'
-import ActivityDashboardState from '../pages/activities/ActivityDashboard.state'
+import ActivityDetailState from '../pages/activities/mobx/components/ActivityDetail.mobx'
+import ActivityCreateState from '../pages/activities/mobx/ActivityCreate.mobx'
+import ActivityEditState from '../pages/activities/mobx/ActivityEdit.mobx'
+import ActivityDashboardState from '../pages/activities/mobx/ActivityDashboard.mobx'
 
 const Routes = () => {
     return (

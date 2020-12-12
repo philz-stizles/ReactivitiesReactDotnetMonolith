@@ -1,18 +1,19 @@
-import React, { ChangeEvent, FormEvent } from 'react'
+import React, { FormEvent, useContext } from 'react'
 import { useState } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
-import {v4 as uuid, v4} from 'uuid'
+import { v4 as uuid } from 'uuid'
+import { observer } from 'mobx-react-lite'
+import { RootStoreContext } from '../../../../data/mobx/rootStore'
 
-interface IProps {
-    activity: IActivity
-    onSetEditMode: (editMode: boolean) => void
-    onCreateActivity: (activity: IActivity) => void
-    onEditActivity: (activity: IActivity) => void
-    isSubmitting: boolean
-}
-
-const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity, isSubmitting }) => {
+const ActivityFormMobx = () => {
+    const { activityStore: { 
+        selectedActivity: activity, 
+        createActivity, 
+        editActivity, 
+        closeForm, 
+        isSubmitting 
+    } } = useContext(RootStoreContext)
+    
     const [activityFormState, setActivityForm] = useState((activity) ? activity : {
         id: '',
         title: '',
@@ -37,9 +38,9 @@ const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreate
                 ...activityFormState,
                 id: uuid()
             }
-            onCreateActivity(newActivity)
+            createActivity(newActivity)
         } else {
-            onEditActivity(activityFormState)
+            editActivity(activityFormState)
         }
     }
 
@@ -77,10 +78,10 @@ const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreate
                     name='venue' 
                     onChange={handleChange}/>
                 <Button loading={isSubmitting} float='right' positive type='submit' content='Submit' />
-                <Button float='right' type='button' content='Cancel' onClick={() => onSetEditMode(false)} />
+                <Button float='right' type='button' content='Cancel' onClick={closeForm} />
             </Form>
         </Segment>
     )
 }
 
-export default ActivityFormState
+export default observer(ActivityFormMobx)

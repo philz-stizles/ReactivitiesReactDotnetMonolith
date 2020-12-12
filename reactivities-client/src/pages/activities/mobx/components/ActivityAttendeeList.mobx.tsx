@@ -1,6 +1,6 @@
 import React from 'react'
 import { List, Segment, Image } from 'semantic-ui-react'
-import { IAttendee } from '../../../models/IAttendee'
+import { IAttendee } from '../../../../models/IAttendee'
 
 interface IProps {
     attendees: IAttendee[]

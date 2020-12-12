@@ -1,15 +1,15 @@
-import React from 'react'
+import { observer } from 'mobx-react-lite'
+import React, { useContext } from 'react'
 import { Button, Icon, Item, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
+import { RootStoreContext } from '../../../../data/mobx/rootStore'
+import { IActivity } from '../../../../models/IActivity'
 
 interface IProps {
     activity: IActivity
-    onActivitySelect: (id: string) => void;
-    onActivityDelete: (id: string) => void;
-    isSubmitting: boolean
 }
 
-const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, onActivityDelete, isSubmitting }) => {
+const ActivityListItemMobx: React.FC<IProps> = ({ activity }) => {
+    const { activityStore: { selectActivity, deleteActivity, isSubmitting, target } } = useContext(RootStoreContext)
     return (
         <Segment.Group>
             <Segment>
@@ -32,18 +32,19 @@ const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, o
                     floated='right' 
                     content='View' 
                     color='blue'
-                    onClick={() => onActivitySelect(activity.id)} 
+                    onClick={() => selectActivity(activity.id)} 
                 ></Button>
                 <Button 
-                    loading={isSubmitting}
+                    name={activity.id}
+                    loading={target === activity.id && isSubmitting}
                     floated='right' 
                     content='Delete' 
                     color='red'
-                    onClick={() => onActivityDelete(activity.id)} 
+                    onClick={(e) => deleteActivity(e, activity.id)} 
                 ></Button>
             </Segment>
         </Segment.Group>
     )
 }
 
-export default ActivityListItemState
+export default observer(ActivityListItemMobx)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Item, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
+import { IActivity } from '../../../../models/IActivity'
 import ActivityListItem from './ActivityListItem.state'
 
 interface IProps {

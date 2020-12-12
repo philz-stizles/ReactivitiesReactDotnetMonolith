@@ -1,12 +1,11 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Button, Container, Grid, Segment } from 'semantic-ui-react'
-// import LoadingComponent from '../components/LoadingComponent'
-import { Activities } from '../../api/agent'
-import { IActivity } from '../../models/IActivity'
+import { Activities } from '../../../api/agent'
+import { IActivity } from '../../../models/IActivity'
 import ActivityList from './components/ActivityList.state'
 import ActivityDetail from './components/ActivityDetail.state'
 import ActivityForm from './components/ActivityForm.state'
-import LoadingComponent from '../../components/LoadingComponent'
+import LoadingComponent from '../../../components/LoadingComponent'
 
 interface IActivityState {
     activities: IActivity[]
@@ -37,7 +36,7 @@ const ActivityDashboardState = () => {
     const handleSelectActivity = (id: string) => {
         setActivityState({
             activities: activityState.activities,
-            selectedActivity: activityState.activities.find(a => a.id == id)
+            selectedActivity: activityState.activities.find(a => a.id === id)
         })
         setEditMode(false)
     }
@@ -63,14 +62,14 @@ const ActivityDashboardState = () => {
 
     const handleCreateActivity = (activity: IActivity) => {
         setSubmitting(true)
-        Activities.create(activity)
-            .then(response => {
+        // Activities.create(activity)
+        //     .then(response => {
                 setActivityState({
                     activities: [...activityState.activities, activity],
                     selectedActivity: activityState.selectedActivity
                 });
                 setEditMode(false)
-            }).then(() => setSubmitting(false))
+            // }).then(() => setSubmitting(false))
     }
 
     const handleEditActivity = (activity: IActivity) => {
@@ -91,7 +90,7 @@ const ActivityDashboardState = () => {
             .then(response => {
                 setActivityState({
                     activities: [...activityState.activities.filter(a => a.id !== id)],
-                    selectedActivity: (activityState.selectedActivity?.id == id) ? null : activityState.selectedActivity
+                    selectedActivity: (activityState.selectedActivity?.id === id) ? null : activityState.selectedActivity
                 })
                 setEditMode(false)
             }).then(() => setSubmitting(false))
@@ -127,7 +126,7 @@ const ActivityDashboardState = () => {
                             <h3>Create Activity</h3>
 
                             <ActivityForm
-                                key={activityState.selectedActivity && activityState.selectedActivity.id || 0} 
+                                key={activityState.selectedActivity && (activityState.selectedActivity.id || 0)} 
                                 activity={activityState.selectedActivity!} 
                                 onCreateActivity={handleCreateActivity}
                                 onEditActivity={handleEditActivity}
