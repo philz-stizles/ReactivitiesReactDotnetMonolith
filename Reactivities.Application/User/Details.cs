@@ -18,25 +18,16 @@ namespace Reactivities.Application.User
 
         public class Handler : IRequestHandler<Query, UserProfileDto>
         {
-            private readonly UserManager<AppUser> _userMgr;
-            private readonly IUserAccessor _userAccessor;
-            private readonly IMapper _mapper;
-            private readonly IJWTGenerator _jWTGenerator;
+            private readonly IUserProfileReader _profileReader;
 
-            public Handler(UserManager<AppUser> userMgr, IUserAccessor userAccessor, IMapper mapper, IJWTGenerator jWTGenerator)
+            public Handler(IUserProfileReader profileReader, IUserAccessor userAccessor)
             {
-                _userMgr = userMgr;
-                _userAccessor = userAccessor;
-                _mapper = mapper;
-                _jWTGenerator = jWTGenerator;
+                _profileReader = profileReader;
             }
 
             public async Task<UserProfileDto> Handle(Query request, CancellationToken cancellationToken)
-            {
-                var existingUser = await _userMgr.FindByNameAsync(request.UserName);
-                if (existingUser == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
-                
-                return _mapper.Map<UserProfileDto>(existingUser);
+            {   
+                return await _profileReader.ReadProfile(request.UserName);
             }
         }
     }

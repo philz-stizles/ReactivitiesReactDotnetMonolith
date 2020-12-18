@@ -12,5 +12,7 @@ namespace Reactivities.Domain.Models
         public virtual ICollection<UserActivity> UserActivities { get; set; }
         public virtual ICollection<UserRole> Roles { get; set; }
         public virtual ICollection<Photo> Photos { get; set; }
+        public virtual ICollection<UserFollowing> Followers { get; set; }
+        public virtual ICollection<UserFollowing> Followees { get; set; }
     }
 }

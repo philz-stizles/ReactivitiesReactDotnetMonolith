@@ -341,3 +341,5 @@ healthchecksdb
 
 
 appsettings.Development.json
+wwwroot
+publish

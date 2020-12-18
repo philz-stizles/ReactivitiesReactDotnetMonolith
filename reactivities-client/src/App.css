@@ -1,8 +1,60 @@
-html{
-    font-size: 62.7%;
+*,
+*::before,
+*::after{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-body{
-    background-color: #f8f9fa !important;
-    font-size: 14rem;
+html {
+    font-size: 62.5%;
+    box-sizing: border-box;
 }
+
+body {
+    background-color: rgb(234, 234, 234) !important;
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #777;
+    display: flex ;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.ui.inverted.top.fixed.menu {
+    background-image: linear-gradient(135deg,
+            rgb(24, 42, 115) 0%,
+            rgb(33, 138, 174) 69%,
+            rgb(32, 167, 172) 89%) !important;
+}
+
+/*home page styles*/
+
+.masthead {
+    display: flex;
+    align-items: center;
+    background-image: linear-gradient(135deg,
+            rgb(24, 42, 115) 0%,
+            rgb(33, 138, 174) 69%,
+            rgb(32, 167, 172) 89%) !important;
+    height: 100vh;
+}
+
+.masthead .ui.menu .ui.button,
+.ui.menu a.ui.inverted.button {
+    margin-left: 0.5em;
+}
+
+.masthead h1.ui.header {
+    font-size: 4em;
+    font-weight: normal;
+}
+
+.masthead h2 {
+    font-size: 1.7em;
+    font-weight: normal;
+}
+
+/*end home page styles*/

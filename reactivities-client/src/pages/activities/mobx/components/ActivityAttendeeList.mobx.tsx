@@ -7,7 +7,7 @@ interface IProps {
     onActivitySelected: (id: string) => void
 }
 
-const ActivityAttendeeListMobx: React.FC<IProps> = ({ attendees, onActivitySelected}) => {
+const ActivityAttendeeListState: React.FC<IProps> = ({ attendees, onActivitySelected}) => {
     return (
         <Segment> 
             <List horizontal>
@@ -23,4 +23,4 @@ const ActivityAttendeeListMobx: React.FC<IProps> = ({ attendees, onActivitySelec
     )
 }
 
-export default ActivityAttendeeListMobx
+export default ActivityAttendeeListState

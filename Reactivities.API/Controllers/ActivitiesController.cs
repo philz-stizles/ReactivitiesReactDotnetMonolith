@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Reactivities.Application.Activities;
 
 namespace Reactivities.API.Controllers
 {
-    // [Authorize]
+    [Authorize]
     public class ActivitiesController : BaseController
     {
         [HttpGet]
-        public async Task<IActionResult> Get(int? skip, int? take)
+        public async Task<IActionResult> Get(int? skip, int? take, bool isHosting, bool isGoing, DateTime? startDate)
         {
-            var result = await Mediator.Send(new List.Query(skip, take));
+            var result = await Mediator.Send(new List.Query(skip, take, isGoing, isHosting, startDate));
             return Ok(result);
         }
 

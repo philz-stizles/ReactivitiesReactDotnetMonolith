@@ -15,3 +15,9 @@ export interface IPagedActivity {
     activities: IActivity[]
     count: number
 }
+
+export interface IActivityResponse {
+    status: boolean
+    message: string
+    data: IActivity
+}

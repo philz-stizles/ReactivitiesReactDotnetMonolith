@@ -1,8 +1,12 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom';
-import { Menu, Container, Button} from 'semantic-ui-react'
+import { observer } from 'mobx-react-lite';
+import React, { useContext } from 'react'
+import { Link, NavLink } from 'react-router-dom';
+import { Menu, Container, Button, Dropdown, Image} from 'semantic-ui-react'
+import { RootStoreContext } from '../data/mobx/rootStore';
 
 const Navbar = () => {
+    const { userStore: { isLoggedIn, user, logout } } = useContext(RootStoreContext)
+    
     return (
         <Menu fixed="top" inverted>
             <Container>
@@ -10,13 +14,29 @@ const Navbar = () => {
                 <Menu.Item as={NavLink} name="About" to="/about" />
                 <Menu.Item as={NavLink} name='Activities' to="/activities"/>
                 <Menu.Item>
-                    <Button positive content="Create Activity" />
+                    <Button as={Link} to={`/createActivity`} positive content="Create Activity" />
                 </Menu.Item>
-                <Menu.Item as={NavLink} name="Contact" to="/contact" />
-                <Menu.Item as={NavLink} name="Sign in" to="/auth" />
+                {
+                    isLoggedIn && user && (
+                        <Menu.Item position='right'>
+                            <Image avatar spaced='right' src={user.image || '/assets/user.png'} />
+                            <Dropdown pointing='top left' text={user.displayName}>
+                            <Dropdown.Menu>
+                                <Dropdown.Item
+                                as={Link}
+                                to={`/profile/username`}
+                                text='My profile'
+                                icon='user'
+                                />
+                                <Dropdown.Item onClick={logout} text='Logout' icon='power' />
+                            </Dropdown.Menu>
+                            </Dropdown>
+                        </Menu.Item>
+                    )
+                }
             </Container>
         </Menu>
     );
 }
 
-export default Navbar
+export default observer(Navbar)

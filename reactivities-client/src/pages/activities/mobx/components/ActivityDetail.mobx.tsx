@@ -1,17 +1,10 @@
+import { observer } from 'mobx-react-lite'
 import React, { useContext } from 'react'
 import { Button, Card } from 'semantic-ui-react'
-import { IActivity } from '../../../../models/IActivity'
-import ActivityStore from '../../../../data/mobx/activityStore'
-import { observer } from 'mobx-react-lite'
+import { RootStoreContext } from '../../../../data/mobx/rootStore'
 
-interface IProps {
-    onSetEditMode: (editMode: boolean) => void;
-    onSetActivity: (selectedActivity: IActivity | null) => void;
-}
-
-const ActivityDetailMobx: React.FC<IProps> = ({ onSetEditMode, onSetActivity }) => {
-    const { selectedActivity } = useContext(ActivityStore)
-
+const ActivityDetailState = () => {
+    const { activityStore: { selectedActivity, setEditMode, closeDetail } } = useContext(RootStoreContext)
     return (
         <Card fluid>
             {/* <Image src='/images/avatar/large/matthew.png' wrapped ui={false} /> */}
@@ -22,12 +15,12 @@ const ActivityDetailMobx: React.FC<IProps> = ({ onSetEditMode, onSetActivity }) 
             </Card.Content>
             <Card.Content extra>
                 <Button.Group width={2}>
-                    <Button basic color='blue' content='Edit' onClick={() => onSetEditMode(true)} />
-                    <Button basic color='grey' content='Cancel' onClick={() => onSetActivity(null)} />
+                    <Button basic color='blue' content='Edit' onClick={() => setEditMode(selectedActivity!.id)} />
+                    <Button basic color='grey' content='Cancel' onClick={closeDetail} />
                 </Button.Group>
             </Card.Content>
         </Card>
     )
 }
 
-export default observer(ActivityDetailMobx)
+export default observer(ActivityDetailState)
