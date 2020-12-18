@@ -1,19 +1,21 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Item, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
-import ActivityListItem from './ActivityListItem.state'
+import { IActivity } from '../../../../models/IActivity'
+import ActivityStore from '../../../../data/mobx/activityStore'
+import ActivityListItem from './ActivityListItem.mobx'
 
 interface IProps {
-    activities: IActivity[]
     onActivitySelect: (id: string) => void
     onActivityDelete: (id: string) => void
     isSubmitting: boolean
 }
 
-const ActivityListState: React.FC<IProps> = ({ activities, onActivitySelect, onActivityDelete, isSubmitting }) => {
+const ActivityListMobx: React.FC<IProps> = ({ onActivitySelect, onActivityDelete, isSubmitting }) => {
+    const activityStore = useContext(ActivityStore)
+
     return (
         <Item.Group divided>
-            {activities.map(activity => {
+            {activityStore.activities.map(activity => {
                 return <ActivityListItem 
                     key={activity.id} 
                     activity={activity} 
@@ -25,4 +27,4 @@ const ActivityListState: React.FC<IProps> = ({ activities, onActivitySelect, onA
     )
 }
 
-export default ActivityListState
+export default ActivityListMobx

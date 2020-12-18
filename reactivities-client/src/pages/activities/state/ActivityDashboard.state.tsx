@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Button, Container, Grid, Segment } from 'semantic-ui-react'
 // import LoadingComponent from '../components/LoadingComponent'
-import { Activities } from '../../api/agent'
-import { IActivity } from '../../models/IActivity'
+import { Activities } from '../../../api/agent'
+import { IActivity } from '../../../models/IActivity'
 import ActivityList from './components/ActivityList.state'
 import ActivityDetail from './components/ActivityDetail.state'
 import ActivityForm from './components/ActivityForm.state'
-import LoadingComponent from '../../components/LoadingComponent'
+import LoadingComponent from '../../../components/LoadingComponent'
 
 interface IActivityState {
     activities: IActivity[]

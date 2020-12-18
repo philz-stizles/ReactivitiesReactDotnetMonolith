@@ -1,7 +1,7 @@
 import React, { ChangeEvent, FormEvent } from 'react'
 import { useState } from 'react'
 import { Button, Form, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
+import { IActivity } from '../../../../models/IActivity'
 import {v4 as uuid, v4} from 'uuid'
 
 interface IProps {
@@ -12,7 +12,7 @@ interface IProps {
     isSubmitting: boolean
 }
 
-const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity, isSubmitting }) => {
+const ActivityFormMobx: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity, isSubmitting }) => {
     const [activityFormState, setActivityForm] = useState((activity) ? activity : {
         id: '',
         title: '',
@@ -83,4 +83,4 @@ const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreate
     )
 }
 
-export default ActivityFormState
+export default ActivityFormMobx

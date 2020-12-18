@@ -1,13 +1,13 @@
 import React from 'react'
 import { List, Segment, Image } from 'semantic-ui-react'
-import { IAttendee } from '../../../models/IAttendee'
+import { IAttendee } from '../../../../models/IAttendee'
 
 interface IProps {
     attendees: IAttendee[]
     onActivitySelected: (id: string) => void
 }
 
-const ActivityAttendeeListState: React.FC<IProps> = ({ attendees, onActivitySelected}) => {
+const ActivityAttendeeListMobx: React.FC<IProps> = ({ attendees, onActivitySelected}) => {
     return (
         <Segment> 
             <List horizontal>
@@ -23,4 +23,4 @@ const ActivityAttendeeListState: React.FC<IProps> = ({ attendees, onActivitySele
     )
 }
 
-export default ActivityAttendeeListState
+export default ActivityAttendeeListMobx

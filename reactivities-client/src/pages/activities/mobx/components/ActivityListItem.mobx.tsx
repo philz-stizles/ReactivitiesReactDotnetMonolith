@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Icon, Item, Segment } from 'semantic-ui-react'
-import { IActivity } from '../../../models/IActivity'
+import { IActivity } from '../../../../models/IActivity'
 
 interface IProps {
     activity: IActivity
@@ -9,7 +9,7 @@ interface IProps {
     isSubmitting: boolean
 }
 
-const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, onActivityDelete, isSubmitting }) => {
+const ActivityListItemMobx: React.FC<IProps> = ({ activity, onActivitySelect, onActivityDelete, isSubmitting }) => {
     return (
         <Segment.Group>
             <Segment>
@@ -46,4 +46,4 @@ const ActivityListItemState: React.FC<IProps> = ({ activity, onActivitySelect, o
     )
 }
 
-export default ActivityListItemState
+export default ActivityListItemMobx
