@@ -10,5 +10,8 @@ namespace Reactivities.Application.User
         public string Bio { get; set; }
         public string Image { get; set; }
         public ICollection<PhotoDto> Photos { get; set; }
+        public bool IsFollowed { get; set; }
+        public int FollowerCount { get; set; }
+        public int FolloweeCount { get; set; }
     }
 }

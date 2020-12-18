@@ -1,28 +1,35 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, withRouter, RouteComponentProps } from 'react-router-dom'
 import Contact from '../pages/Contact'
 import About from '../pages/About'
 import Home from '../pages/Home'
-import Auth from '../pages/Auth'
-import ActivityDetailState from '../pages/activities/mobx/components/ActivityDetail.mobx'
-import ActivityCreateState from '../pages/activities/mobx/ActivityCreate.mobx'
-import ActivityEditState from '../pages/activities/mobx/ActivityEdit.mobx'
-import ActivityDashboardState from '../pages/activities/mobx/ActivityDashboard.mobx'
+import ActivityDetail from '../pages/Activities/mobx/ActivityDetail.mobx'
+import ActivityEdit from '../pages/Activities/mobx/ActivityEdit.mobx'
+import ActivityDashboard from '../pages/Activities/mobx/ActivityDashboard.mobx'
+import Register from '../pages/Auth/mobx/Register.mobx'
+import Login from '../pages/Auth/mobx/Login.mobx'
+import { NotFound } from '../pages/NotFound'
+import { Container } from 'semantic-ui-react'
 
-const Routes = () => {
+const Routes: React.FC<RouteComponentProps> = ({location}) => {
     return (
-        <Switch>
-            {/* exact is very important in the statement below*/}
-            <Route exact path="/" component={Home} /> 
-            <Route path="/auth" component={Auth} />
-            <Route path="/contact" component={Contact} />
-            <Route path="/about" component={About} />
-            <Route path="/activities" component={ActivityDashboardState} />
-            <Route path="/activities/:id" component={ActivityDetailState} />
-            <Route path="/activities/:id" component={ActivityEditState} />
-            <Route path="/createActivity" component={ActivityCreateState} />
-        </Switch>
+       <Container style={{ marginTop: '7em' }}>
+            <Switch>
+                {/* exact is very important in the statement below*/}
+                <Route exact path="/" component={Home} /> 
+                <Route path="/register" component={Register} />
+                <Route path="/login" component={Login} />
+                <Route path="/contact" component={Contact} />
+                <Route path="/about" component={About} />
+                {/* exact is very important in the statement below*/}
+                <Route exact path="/activities" component={ActivityDashboard} />
+                <Route path="/activities/:id" component={ActivityDetail} />
+                {/* <Route path="/manage/:id" component={ActivityEdit} /> */}
+                <Route key={location.key} path={["/createActivity", "/manage/:id"]} component={ActivityEdit} />
+                <Route component={NotFound} />
+            </Switch>
+       </Container>
     )
 }
 
-export default Routes
+export default withRouter(Routes)

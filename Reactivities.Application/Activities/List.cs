@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Reactivities.Domain.Models;
 using Reactivities.Persistence;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -20,14 +21,20 @@ namespace Reactivities.Application.Activities
 
         public class Query: IRequest<PagedActivities> 
         {
-            public Query(int? skip, int? take)
+            public Query(int? skip, int? take, bool isGoing, bool isHost, DateTime? startDate)
             {
                 Skip = skip;
                 Take = take;
+                IsGoing = isGoing;
+                IsHost = isHost;
+                StartDate = startDate;
             }
 
             public int? Skip { get; set; }
             public int? Take{ get; set; }
+            public bool IsHost { get; set; }
+            public bool IsGoing { get; set; }
+            public DateTime? StartDate { get; set; }
         }
 
         public class Handler : IRequestHandler<Query, PagedActivities>
@@ -43,7 +50,14 @@ namespace Reactivities.Application.Activities
 
             public async Task<PagedActivities> Handle(Query request, CancellationToken cancellationToken)
             {
-                var query = _context.Activities.AsQueryable();
+                var query = _context.Activities
+                    // .Where(a => a.Date >= request.StartDate)
+                    .OrderBy(a => a.Date)
+                    .AsQueryable();
+
+                if (request.IsGoing && !request.IsHost) { 
+
+                }
 
                 var activities = await query
                 .Include(a => a.ActivityUsers).ThenInclude(au => au.AppUser)

@@ -1,7 +1,8 @@
-import { action, computed, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { User } from "../../api/agent";
 import { IUser, IUserLogin, IUserRegister } from '../../models/IUser';
 import { RootStore } from "./rootStore";
+import { history } from '../..'
 
 export default class UserStore {
     rootStore: RootStore
@@ -19,6 +20,7 @@ export default class UserStore {
     }
 
     @action register = async (credentials: IUserRegister) => {
+        console.log(credentials)
         this.isSubmitting = true
         try {
             await User.register(credentials)
@@ -30,15 +32,30 @@ export default class UserStore {
     }
 
     @action login = async (credentials: IUserLogin) => {
+        console.log(credentials)
         this.isSubmitting = true
         try {
-            const user = await User.login(credentials)
-            this.user = user
-            this.isSubmitting = false
+            const { token, userDetails} = await User.login(credentials)
+            runInAction(() => {
+                this.user = userDetails
+                this.user.token = token
+                this.isSubmitting = false
+            })
+            this.rootStore.commonStore.setToken(token)
+            this.rootStore.modalStore.closeModal()
+            history.push('/activities')
         } catch (error) {
-            this.isSubmitting = false
+            runInAction(() => {
+                this.isSubmitting = false
+            })
             console.log(error)
         }
+    }
+
+    @action logout = async () => {
+        this.rootStore.commonStore.setToken(null)
+        this.user = null
+        // history.push('/login')
     }
 }
 

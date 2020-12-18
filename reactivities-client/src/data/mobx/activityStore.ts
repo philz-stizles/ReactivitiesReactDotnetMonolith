@@ -1,6 +1,6 @@
 import { RootStore } from './rootStore';
 import { IActivity } from './../../models/IActivity';
-import { action, computed, makeObservable, observable } from "mobx";
+import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { Activities } from '../../api/agent'
 import { IUser } from '../../models/IUser';
 import { SyntheticEvent } from 'react';
@@ -30,13 +30,17 @@ export default class ActivityStore {
         this.isLoading = true;
         try {
             const pagedActivities = await Activities.list()
-            pagedActivities.activities.forEach((activity) => {
-                this.activitiesRegistry.set(activity.id, activity);
+            runInAction(() => {
+                pagedActivities.activities.forEach((activity) => {
+                    this.activitiesRegistry.set(activity.id, activity);
+                })
+                this.isLoading = false
             })
-            this.isLoading = false
         } catch (error) {
+            runInAction(() => {
+                this.isLoading = false
+            })
             console.log(error)
-            this.isLoading = false
         }
     }
 
@@ -86,6 +90,43 @@ export default class ActivityStore {
     //     this.selectedActivity = this.activities.find(activity => activity.id === id)
     //     this.editMode = false
     // }
+
+    // @action getActivity = async (id: string) => {
+    //     let activity = this.activitiesRegistry.get(id)
+    //     console.log(this.selectActivity)
+    //     if(activity) {
+    //         this.selectedActivity = activity  
+    //     } else {
+    //         await this.loadActivity(id)
+    //     }
+    //     console.log(this.selectedActivity)
+    // }
+
+    @action loadActivity = async (id: string) => {
+        let activity = this.activitiesRegistry.get(id)
+        if(activity) {
+            this.selectedActivity = activity
+        } else {
+            this.isLoading = true
+            try {
+                const activity = (await Activities.details(id)).data
+                console.log(activity)
+                runInAction(() =>  {
+                    this.selectedActivity = activity
+                    // this.editMode = false
+                    this.isLoading = false
+                })
+            } catch (error) {
+                runInAction(() => this.isLoading = false)
+                console.log(error)
+                throw(error)
+            }
+        }
+    }
+
+    @action clearActivity = () => {
+        this.selectedActivity = null;
+    }
 
     @action createActivity = async (activity: IActivity) => {
         console.log("here")

@@ -1,14 +1,18 @@
-import React from 'react'
-import { Container, Grid } from 'semantic-ui-react'
+import React, {  } from 'react'
+import { RouteComponentProps } from 'react-router-dom'
+import { observer } from 'mobx-react-lite'
+import ActivityFormMobx from './components/ActivityForm.mobx'
 
-const ActivityEditMobx= () => {
+interface DetailParams {
+    id: string
+}
+
+const ActivityEditMobx: React.FC<RouteComponentProps<DetailParams>> = ({ match, history }) => {
+
 
     return (
-        <Container style={{ marginTop: ''}}>
-            <Grid>
-            </Grid>
-        </Container>
+        <ActivityFormMobx id={match.params.id} history={history} />
     )
 }
 
-export default ActivityEditMobx
+export default observer(ActivityEditMobx)

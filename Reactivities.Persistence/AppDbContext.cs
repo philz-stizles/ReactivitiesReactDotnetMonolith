@@ -8,6 +8,7 @@ namespace Reactivities.Persistence
     {
         public DbSet<Activity> Activities { get; set; }
         public DbSet<UserActivity> UserActivities { get; set; }
+        public DbSet<UserFollowing> UserFollowings { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Photo> Photos { get; set; }
 
@@ -48,6 +49,22 @@ namespace Reactivities.Persistence
                 .HasOne(e => e.Activity)
                 .WithMany(a => a.ActivityUsers)
                 .HasForeignKey(e => e.ActivityId);
+
+            builder.Entity<UserFollowing>(
+                ua => ua.HasKey(ur => new { ur.FollowerId, ur.FolloweeId })
+            );
+
+            builder.Entity<UserFollowing>()
+                .HasOne(e => e.Follower)
+                .WithMany(u => u.Followees)
+                .HasForeignKey(e => e.FollowerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<UserFollowing>()
+                .HasOne(e => e.Followee)
+                .WithMany(a => a.Followers)
+                .HasForeignKey(e => e.FolloweeId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

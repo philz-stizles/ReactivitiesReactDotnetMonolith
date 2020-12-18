@@ -24,10 +24,14 @@ namespace Reactivities.Application.Mappings
             CreateMap<AppUser, UserDto>().ReverseMap();
             CreateMap<UserActivity, AttendeeDto>()
                 .ForMember(ad => ad.DisplayName, opt => opt.MapFrom(ua => ua.AppUser.DisplayName))
-                .ForMember(ad => ad.UserName, opt => opt.MapFrom(ua => ua.AppUser.UserName));
+                .ForMember(ad => ad.UserName, opt => opt.MapFrom(ua => ua.AppUser.UserName))
+                .ForMember(ad => ad.Image, opt => opt.MapFrom(ua => ua.AppUser.Photos.SingleOrDefault(p => p.IsMain).Url));
+                // .ForMember(ad => ad.IsFollowing, opt => opt.MapFrom<IsFollowingResolver>());
 
             CreateMap<AppUser, User.UserProfileDto>()
-                .ForMember(up => up.Image, opt => opt.MapFrom(au => au.Photos.FirstOrDefault(p => p.IsMain).Url));
+                .ForMember(up => up.Image, opt => opt.MapFrom(au => au.Photos.FirstOrDefault(p => p.IsMain).Url))
+                .ForMember(up => up.FollowerCount, opt => opt.MapFrom(au => au.Followers.Count()))
+                .ForMember(up => up.FolloweeCount, opt => opt.MapFrom(au => au.Followees.Count()));
         }
     }
 }

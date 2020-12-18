@@ -1,12 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <ItemGroup>
-    <ProjectReference Include="..\Reactivities.Application\Reactivities.Application.csproj" />
-    <ProjectReference Include="..\Reactivities.Infrastructure\Reactivities.Infrastructure.csproj" />
+    <ProjectReference Include="..\Reactivities.Application\Reactivities.Application.csproj"/>
+    <ProjectReference Include="..\Reactivities.Infrastructure\Reactivities.Infrastructure.csproj"/>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.9"/>
+    <PackageReference Include="NWebsec.AspNetCore.Middleware" Version="3.0.0"/>
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 </Project>
