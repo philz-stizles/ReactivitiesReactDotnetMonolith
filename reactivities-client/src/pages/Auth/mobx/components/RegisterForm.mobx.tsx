@@ -1,10 +1,11 @@
 import { observer } from 'mobx-react-lite';
-import React, { FormEvent, useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import { Container, Form, Button } from 'semantic-ui-react';
 import { RootStoreContext } from '../../../../data/mobx/rootStore';
-import { IUserRegister } from '../../../../models/IUser';
+import { IUserRegister } from '../../../../models/IAuth';
 import { Form as FinalForm, Field } from 'react-final-form'
-import TextInput from '../../../../components/TextInput';
+import TextInput from '../../../../components/Form/TextInput';
+import ErrorMessage from '../../../../components/ErrorMessage';
 
 const RegisterFormMobx = () => {
     const { userStore: { register, isSubmitting } } = useContext(RootStoreContext)
@@ -12,7 +13,7 @@ const RegisterFormMobx = () => {
     return (
         <Container>
             <FinalForm 
-                onSubmit={(values: IUserRegister) => register(values).catch(error => ({}))} 
+                onSubmit={(values: IUserRegister) => register(values).catch(() => ({}))} 
                 render={({handleSubmit}) => (
                     <Form onSubmit={handleSubmit}>
                         <Field 
@@ -31,7 +32,10 @@ const RegisterFormMobx = () => {
                             placeholder='Password'  
                             name='password'
                             render={TextInput} />
-                        <Button loading={isSubmitting} fluid color='teal' type='submit' content='Submit' />
+                        {/* {submitError && !dirtySinceLastSubmit && (
+                            <ErrorMessage error={submitError} text={JSON.stringify(submitError.data.errors)} />
+                        )} */}
+                        <Button loading={isSubmitting} fluid color='teal' type='Register' content='Submit' />
                     </Form>
                 )}/>
         </Container>

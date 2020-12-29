@@ -13,12 +13,12 @@ interface IProps {
 }
 
 const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreateActivity, onEditActivity, isSubmitting }) => {
-    const [activityFormState, setActivityForm] = useState((activity) ? activity : {
+    const [activityFormState, setActivityForm] = useState<IActivity>((activity) ? activity : {
         id: '',
         title: '',
         category: '',
         description: '',
-        date: '',
+        date: new Date(),
         city: '',
         venue: ''
     })

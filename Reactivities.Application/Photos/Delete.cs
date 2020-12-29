@@ -36,7 +36,9 @@ namespace Reactivities.Application.Photos
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
+                var existingUser = await _context.Users
+                    .Include(qu => qu.Photos)
+                    .SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
                 if (existingUser == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
 
                 var userPhoto = existingUser.Photos.FirstOrDefault(p => p.Id == request.Id);

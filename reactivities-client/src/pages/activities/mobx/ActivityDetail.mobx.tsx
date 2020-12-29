@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import React, { useContext, useEffect } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
-import { Grid } from 'semantic-ui-react'
+import { Container, Grid } from 'semantic-ui-react'
 import LoadingComponent from '../../../components/LoadingComponent'
 import { RootStoreContext } from '../../../data/mobx/rootStore'
 import ActivityDetailChat from './components/ActivityDetailChat.mobx'
@@ -26,6 +26,7 @@ const ActivityDetailMobx : React.FC<RouteComponentProps<DetailParams>>= ({ histo
     if(isLoading || !selectedActivity) return <LoadingComponent content='Loading activitiy ...' />
 
     return (
+        <Container style={{ marginTop: '7em'}}>
         <Grid>
             <Grid.Column width={10}>
                 <ActivityDetailHeader activity={selectedActivity} />
@@ -36,6 +37,7 @@ const ActivityDetailMobx : React.FC<RouteComponentProps<DetailParams>>= ({ histo
                 <ActivityDetailSidebar />
             </Grid.Column>
         </Grid>
+        </Container>
     )
 }
 

@@ -37,7 +37,9 @@ namespace Reactivities.Application.Photos
 
             public async Task<PhotoDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
+                var existingUser = await _context.Users
+                    .Include(qu => qu.Photos)
+                    .SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
                 if (existingUser == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
 
                 var uploadResult = await _photoAccessor.UploadFileAsync(request.File);

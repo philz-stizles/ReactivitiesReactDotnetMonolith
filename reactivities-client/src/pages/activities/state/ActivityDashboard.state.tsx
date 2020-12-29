@@ -1,9 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
 import { Button, Container, Grid, Segment } from 'semantic-ui-react'
-<<<<<<< HEAD:reactivities-client/src/pages/activities/state/ActivityDashboard.state.tsx
-// import LoadingComponent from '../components/LoadingComponent'
-=======
->>>>>>> 325b9e10db3e903c7841cba95754da52b0d42a01:reactivities-client/src/pages/activities/ActivityDashboard.state.tsx
 import { Activities } from '../../../api/agent'
 import { IActivity } from '../../../models/IActivity'
 import ActivityList from './components/ActivityList.state'

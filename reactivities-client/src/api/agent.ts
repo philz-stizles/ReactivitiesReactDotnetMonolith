@@ -1,6 +1,9 @@
-import { IUser, IUserLogin, IUserLoginResponse, IUserRegister } from './../models/IUser';
+import { IUserLogin, IUserLoginResponse, IUserRegister } from '../models/IAuth'
 import axios, { AxiosResponse } from 'axios'
 import { IActivity, IActivityResponse, IPagedActivity } from '../models/IActivity'
+import { history } from '..'
+import { toast } from 'react-toastify'
+import { IProfile, IProfileResponse } from '../models/IProfile'
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL
 
@@ -14,13 +17,32 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(undefined, (error) => {
+    // Network Error or API unreachable
+    if(error.message === 'Network Error' && !error.response){
+        toast.error('Check connection')
+    }
+
     if(error.response.status === 404){
-        throw error.response
+        history.push('/notfound')
+        // throw error.response
+    }
+
+    // Handle the situation where an expected NOTFOUND response returns BAD REQUEST due to GUID validation
+    if(error.response.status === 400 
+            && error.response.config.method === 'get' 
+            && error.response.data.errors.hasOwnProperty('id')){
+        history.push('/notfound')
+        // throw error.response
+    }
+
+    // Handling Internal Server error
+    if(error.response.status === 500){
+        toast.error('Server error - Please try again later')
     }
 })
 
 const responseBody = (response: AxiosResponse) => response.data
- 
+
 const requests = {
     get: (url: string) => axios.get(url).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
@@ -31,7 +53,19 @@ const requests = {
 const User = {
     register: (credentials: IUserRegister) => requests.post('/Auth/RegisterWithReturnToken', credentials),
     login: (credentials: IUserLogin): Promise<IUserLoginResponse> => requests.post('/Auth/Login', credentials),
-    currentUser: (): Promise<IUser> => requests.get(`/Auth/CurrentUser`)
+    facebookLogin: (accessToken: string): Promise<IUserLoginResponse> => requests.post('/Auth/FacebookLogin', {accessToken}),
+    currentUser: (): Promise<IUserLoginResponse> => requests.get(`/Auth/CurrentUser`)
+}
+
+const Profile = {
+    get: (username: string): Promise<IProfileResponse> => requests.get(`/User/${username}`),
+    edit: (profile: IProfile) => requests.put(`/User/${profile.userName}`, profile)
+}
+
+const Photo = {
+    upload: (file: IProfile) => requests.post(`/Photo`, file),
+    delete: (id: string) => requests.delete(`/Photo/${id}`),
+    setMain: (id: string) => requests.put(`/Photo/${id}`, {}),
 }
 
 const Activities = {
@@ -44,5 +78,7 @@ const Activities = {
 
 export {
     User,
+    Profile,
+    Photo,
     Activities
 }

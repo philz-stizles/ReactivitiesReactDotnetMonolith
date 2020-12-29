@@ -4,7 +4,7 @@ import { RootStore } from "./rootStore";
 export default class CommonStore {
     rootStore: RootStore
 
-    @observable token: string | null =  null
+    @observable token: string | null = window.localStorage.getItem('token')
     @observable appLoaded = false
 
     constructor(rootStore: RootStore) {
@@ -22,6 +22,10 @@ export default class CommonStore {
 
     @action setToken = (token: string | null) => {
         this.token = token
+    }
+
+    @action retrieveToken = () => {
+        this.token = window.localStorage.getItem('token')
     }
 
     @action setAppLoaded = () => {

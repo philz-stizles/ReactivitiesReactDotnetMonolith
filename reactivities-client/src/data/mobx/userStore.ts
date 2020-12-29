@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { User } from "../../api/agent";
-import { IUser, IUserLogin, IUserRegister } from '../../models/IUser';
+import { IUser, IUserLogin, IUserRegister } from '../../models/IAuth';
 import { RootStore } from "./rootStore";
 import { history } from '../..'
 
@@ -48,6 +48,27 @@ export default class UserStore {
             runInAction(() => {
                 this.isSubmitting = false
             })
+            throw(error)
+        }
+    }
+
+    @action facebookLogin = async (response: any) => {
+        console.log(response)
+    }
+
+    @action googleLogin = async (response: any) => {
+        console.log(response)
+    }
+
+    @action getUser = async () => {
+        try {
+            const user = (await User.currentUser()).userDetails
+            console.log(user)
+            runInAction(() =>  {
+                this.user = user
+            //     this.isLoading = false
+            })
+        } catch (error) {
             console.log(error)
         }
     }
@@ -55,7 +76,7 @@ export default class UserStore {
     @action logout = async () => {
         this.rootStore.commonStore.setToken(null)
         this.user = null
-        // history.push('/login')
+        history.push('/')
     }
 }
 

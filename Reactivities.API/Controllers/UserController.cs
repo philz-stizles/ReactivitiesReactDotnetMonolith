@@ -12,7 +12,7 @@ namespace Reactivities.API.Controllers
         public async Task<IActionResult> Get(string username)
         {
             var result = await Mediator.Send(new Details.Query { UserName = username });
-            return Ok(result);
+            return Ok(new { Status = true, Message="Profile retrieved successfully", Data = result });
         }
 
         [HttpPatch]

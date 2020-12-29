@@ -1,10 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
-using Microsoft.AspNetCore.Identity;
-using Reactivities.Application.Errors;
+﻿using MediatR;
 using Reactivities.Application.Interfaces;
-using Reactivities.Domain.Models;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 

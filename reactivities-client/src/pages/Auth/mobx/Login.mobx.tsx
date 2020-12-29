@@ -1,13 +1,18 @@
 import React, { useContext } from 'react'
 import { Container, Form, Button, Header } from 'semantic-ui-react';
-import TextInput from '../../../components/TextInput';
+import TextInput from '../../../components/Form/TextInput';
 import { RootStoreContext } from '../../../data/mobx/rootStore';
-import { IUserLogin } from '../../../models/IUser';
+import { IUserLogin } from '../../../models/IAuth';
 import { Form as FinalForm, Field } from 'react-final-form'
+import FacebookLogin from 'react-facebook-login';
 
 const LoginMobx = () => {
     const { userStore: { login, isSubmitting } } = useContext(RootStoreContext)
 
+    const responseFacebook = (response: any) => {
+        console.log(response);
+    }
+    
     return (
         <Container style={{'marginTop': '5rem'}}>
             <FinalForm 
@@ -24,6 +29,12 @@ const LoginMobx = () => {
                             name='password'
                             render={TextInput} />
                         <Button loading={isSubmitting} float='right' positive type='submit' content='Submit' />
+                        <FacebookLogin
+                            appId="1088597931155576"
+                            autoLoad={true}
+                            fields="name,email,picture"
+                            // onClick={componentClicked}
+                            callback={responseFacebook} />
                     </Form>
                 )}/>
         </Container>

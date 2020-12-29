@@ -20,7 +20,7 @@ namespace Reactivities.API.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             var result = await Mediator.Send(new Delete.Command { Id = id });
-            return Ok(new { Status = true, Data = result, Message = "Photo deleted successful"});
+            return Ok(new { Status = true, Message = "Photo deleted successful"});
         }
 
         [HttpPost("{id}/SetMain")]

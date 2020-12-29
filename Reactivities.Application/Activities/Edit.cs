@@ -34,25 +34,30 @@ namespace Reactivities.Application.Activities
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var existingActivity = await _context.Activities.FindAsync(request.Id);
-                if (existingActivity == null)
+                try
                 {
-                    throw new RestException(HttpStatusCode.NotFound, "Activity does not exist");
+                    var existingActivity = await _context.Activities.FindAsync(request.Id);
+                    if (existingActivity == null)
+                    {
+                        throw new RestException(HttpStatusCode.NotFound, "Activity does not exist");
+                    }
+
+                    existingActivity.Title = request.Title ?? existingActivity.Title;
+                    existingActivity.Description = request.Description ?? existingActivity.Description;
+                    existingActivity.Category = request.Category ?? existingActivity.Category;
+                    existingActivity.Date = request.Date ?? existingActivity.Date;
+                    existingActivity.City = request.City ?? existingActivity.City;
+                    existingActivity.Venue = request.Venue ?? existingActivity.Venue;
+
+                    await _context.SaveChangesAsync();
+
+                    return Unit.Value;
                 }
+                catch (Exception ex)
+                {
 
-                existingActivity.Title = request.Title ?? existingActivity.Title;
-                existingActivity.Description = request.Description ?? existingActivity.Description;
-                existingActivity.Category = request.Category ?? existingActivity.Category;
-                existingActivity.Date = request.Date ?? existingActivity.Date;
-                existingActivity.City = request.City ?? existingActivity.City;
-                existingActivity.Venue = request.Venue ?? existingActivity.Venue;
-
-                var isSaved = (await _context.SaveChangesAsync()) > 0;
-                if (!isSaved) {
-                    throw new Exception("Problem saving changes");
+                    throw new Exception(ex.Message);
                 }
-
-                return Unit.Value;
             }
         }
     }

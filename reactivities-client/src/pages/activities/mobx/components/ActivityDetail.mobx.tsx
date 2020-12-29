@@ -4,7 +4,8 @@ import { Button, Card } from 'semantic-ui-react'
 import { RootStoreContext } from '../../../../data/mobx/rootStore'
 
 const ActivityDetailState = () => {
-    const { activityStore: { selectedActivity, setEditMode, closeDetail } } = useContext(RootStoreContext)
+    // const { activityStore: { selectedActivity, setEditMode, closeDetail } } = useContext(RootStoreContext)
+    const { activityStore: { selectedActivity } } = useContext(RootStoreContext)
     return (
         <Card fluid>
             {/* <Image src='/images/avatar/large/matthew.png' wrapped ui={false} /> */}
@@ -15,8 +16,8 @@ const ActivityDetailState = () => {
             </Card.Content>
             <Card.Content extra>
                 <Button.Group width={2}>
-                    <Button basic color='blue' content='Edit' onClick={() => setEditMode(selectedActivity!.id)} />
-                    <Button basic color='grey' content='Cancel' onClick={closeDetail} />
+                    {/* <Button basic color='blue' content='Edit' onClick={() => setEditMode(selectedActivity!.id)} /> */}
+                    {/* <Button basic color='grey' content='Cancel' onClick={closeDetail} /> */}
                 </Button.Group>
             </Card.Content>
         </Card>

@@ -2,19 +2,17 @@ import { RootStore } from './rootStore';
 import { IActivity } from './../../models/IActivity';
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { Activities } from '../../api/agent'
-import { IUser } from '../../models/IUser';
 import { SyntheticEvent } from 'react';
 
 export default class ActivityStore {
     rootStore: RootStore
 
     @observable activitiesRegistry = new Map()
-    @observable user: IUser | undefined | null
     @observable activities: IActivity[] = []
-    @observable selectedActivity: IActivity | undefined | null
+    @observable selectedActivity: IActivity | null = null
     @observable isLoading = false
     @observable isSubmitting = false
-    @observable editMode = false
+    // @observable editMode = false
     @observable target = ''
 
     constructor(rootStore: RootStore) {
@@ -23,15 +21,17 @@ export default class ActivityStore {
     }
 
     @computed get activitiesByDate() {
-        return Array.from(this.activitiesRegistry.values()).sort((a, b) => Date.parse(b.date) - Date.parse(a.date))
+        const activities: IActivity[] = Array.from(this.activitiesRegistry.values())
+        return activities // .sort((a, b) => a.date!.getTime() - b.date!.getTime())
     }
 
     @action loadActivities = async () => {
         this.isLoading = true;
         try {
-            const pagedActivities = await Activities.list()
+            const {activities} = await Activities.list()
             runInAction(() => {
-                pagedActivities.activities.forEach((activity) => {
+                activities.forEach((activity) => {
+                    activity.date = new Date(activity.date)
                     this.activitiesRegistry.set(activity.id, activity);
                 })
                 this.isLoading = false
@@ -59,32 +59,32 @@ export default class ActivityStore {
     //         .finally(() => this.isLoading = false)
     // }
 
-    @action setActivity = (selectedActivity: IActivity | undefined | null) => {
-        this.selectedActivity = selectedActivity
-    }
+    // @action setActivity = (selectedActivity: IActivity | undefined | null) => {
+    //     this.selectedActivity = selectedActivity
+    // }
 
-    @action setCreateMode = () => {
-        this.editMode = true
-        this.selectedActivity = undefined
-    }
+    // @action setCreateMode = () => {
+    //     this.editMode = true
+    //     this.selectedActivity = undefined
+    // }
 
-    @action setEditMode = (id: string) => {
-        this.selectedActivity = this.activitiesRegistry.get(id)
-        this.editMode = true
-    }
+    // @action setEditMode = (id: string) => {
+    //     this.selectedActivity = this.activitiesRegistry.get(id)
+    //     this.editMode = true
+    // }
 
-    @action closeForm = () => {
-        this.editMode = false
-    }
+    // @action closeForm = () => {
+    //     this.editMode = false
+    // }
 
-    @action closeDetail = () => {
-        this.selectedActivity = undefined
-    }
+    // @action closeDetail = () => {
+    //     this.selectedActivity = undefined
+    // }
 
-    @action selectActivity = (id: string) => {
-        this.selectedActivity = this.activitiesRegistry.get(id)
-        this.editMode = false
-    }
+    // @action selectActivity = (id: string) => {
+    //     this.selectedActivity = this.activitiesRegistry.get(id)
+    //     this.editMode = false
+    // }
 
     // @action selectActivity = (id: string) => {
     //     this.selectedActivity = this.activities.find(activity => activity.id === id)
@@ -106,16 +106,17 @@ export default class ActivityStore {
         let activity = this.activitiesRegistry.get(id)
         if(activity) {
             this.selectedActivity = activity
+            return activity
         } else {
             this.isLoading = true
             try {
                 const activity = (await Activities.details(id)).data
-                console.log(activity)
+                activity.date = new Date(activity.date)
                 runInAction(() =>  {
                     this.selectedActivity = activity
-                    // this.editMode = false
                     this.isLoading = false
                 })
+                return activity
             } catch (error) {
                 runInAction(() => this.isLoading = false)
                 console.log(error)
@@ -133,9 +134,11 @@ export default class ActivityStore {
         this.isSubmitting = true
         try {
             await Activities.create(activity)
-            this.activitiesRegistry.set(activity.id, activity)
-            this.editMode = false
-            this.isSubmitting = false
+            runInAction(() =>  {
+                this.activitiesRegistry.set(activity.id, activity)
+                // this.editMode = false
+                this.isSubmitting = false
+            })
         } catch (error) {
             this.isSubmitting = false
             console.log(error)
@@ -158,10 +161,12 @@ export default class ActivityStore {
         this.isSubmitting = true
         try {
             await Activities.update(activity)
-            this.activitiesRegistry.set(activity.id, activity)
-            this.selectedActivity = activity
-            this.editMode = false
-            this.isSubmitting = false
+            runInAction(() =>  {
+                this.activitiesRegistry.set(activity.id, activity)
+                this.selectedActivity = activity
+                // this.editMode = false
+                this.isSubmitting = false
+            })
         } catch (error) {
             this.isSubmitting = false
             console.log(error)

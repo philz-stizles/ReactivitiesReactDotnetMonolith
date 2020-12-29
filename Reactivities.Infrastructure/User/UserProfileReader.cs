@@ -28,7 +28,11 @@ namespace Reactivities.Infrastructure.User
             var currentUser = await _context.Users.SingleOrDefaultAsync(u => u.UserName == _userAccessor.GetCurrentUserName());
             if (currentUser == null) throw new RestException(HttpStatusCode.Unauthorized, "Unauthorized access");
 
-            var existingUser = await _context.Users.SingleOrDefaultAsync(u => u.UserName == username);
+            var existingUser = await _context.Users
+                    .Include(qu => qu.Photos)
+                    .Include(qu => qu.Followers)
+                    .Include(qu => qu.Followees)
+                    .SingleOrDefaultAsync(u => u.UserName == username);
             if (existingUser == null) throw new RestException(HttpStatusCode.NotFound, "User not found");
 
             var userProfileDto = _mapper.Map<UserProfileDto>(existingUser);

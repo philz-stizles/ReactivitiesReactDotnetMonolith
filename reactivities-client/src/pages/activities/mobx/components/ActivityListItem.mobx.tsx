@@ -16,16 +16,19 @@ const ActivityListItemMobx: React.FC<IProps> = ({ activity }) => {
             <Segment>
                 <Item.Group>
                     <Item>
-                        <Item.Image size='tiny' circular src='' />
+                        <Item.Image size='tiny' circular src={'/assets/user.png'} />
                         <Item.Content>
-                            <Item.Header as='a'>{activity.title}</Item.Header>
-                            <Item.Header as='a'>Hosted by Philz</Item.Header>
+                            <Item.Header as={Link} to={`/activities/${activity.id}`}>{activity.title}</Item.Header>
+                            <Item.Description>
+                                Hosted by Philz
+                                <Link to={`/profile/`}/>
+                            </Item.Description>
                         </Item.Content>
                     </Item>
                 </Item.Group>
             </Segment>
             <Segment>
-                <Icon name='clock' /> {activity.date}
+                <Icon name='clock' /> {activity.date.toDateString()}
                 <Icon name='marker' /> {activity.venue}, {activity.city}
             </Segment>
             <Segment secondary>

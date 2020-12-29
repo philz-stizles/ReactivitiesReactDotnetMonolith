@@ -59,9 +59,11 @@ namespace Reactivities.API
 
             // services.AddDocumentationServices("Reactivities API");
             services.AddDbContext<AppDbContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection"), 
+                    options => options.EnableRetryOnFailure())
+                    
                 // options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")
-            ));
+            );
 
             // AddIdentityCore allows us to have control over the Identity configuration - so as to use JWT Tokens 
             // Unlike AddIdentity that would use the default identity configuration which would setup to use cookies

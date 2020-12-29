@@ -2,9 +2,9 @@ import { observer } from 'mobx-react-lite';
 import React, { FormEvent, useContext, useState } from 'react'
 import { Container, Form, Button } from 'semantic-ui-react';
 import { RootStoreContext } from '../../../data/mobx/rootStore';
-import { IUserRegister } from '../../../models/IUser';
+import { IUserRegister } from '../../../models/IAuth';
 import { Form as FinalForm, Field } from 'react-final-form'
-import TextInput from '../../../components/TextInput';
+import TextInput from '../../../components/Form/TextInput';
 
 const RegisterMobx = () => {
     const { userStore: { register, isSubmitting } } = useContext(RootStoreContext)

@@ -2,6 +2,7 @@
 using Reactivities.Application.Activities;
 using Reactivities.Application.Auth;
 using Reactivities.Application.Comments;
+using Reactivities.Application.Photos;
 using Reactivities.Domain.Models;
 using System.Linq;
 
@@ -32,6 +33,9 @@ namespace Reactivities.Application.Mappings
                 .ForMember(up => up.Image, opt => opt.MapFrom(au => au.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(up => up.FollowerCount, opt => opt.MapFrom(au => au.Followers.Count()))
                 .ForMember(up => up.FolloweeCount, opt => opt.MapFrom(au => au.Followees.Count()));
+
+            // AppUser
+            CreateMap<Photo, PhotoDto>().ReverseMap();
         }
     }
 }
