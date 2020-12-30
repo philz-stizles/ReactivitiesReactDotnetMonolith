@@ -19,26 +19,26 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(undefined, (error) => {
     // Network Error or API unreachable
     if(error.message === 'Network Error' && !error.response){
-        toast.error('Check connection')
+        toast.error('Check network connection')
     }
 
-    if(error.response.status === 404){
+    const { status, data, config, headers } = error.response
+
+    if(status === 404){
         history.push('/notfound')
-        // throw error.response
     }
 
     // Handle the situation where an expected NOTFOUND response returns BAD REQUEST due to GUID validation
-    if(error.response.status === 400 
-            && error.response.config.method === 'get' 
-            && error.response.data.errors.hasOwnProperty('id')){
+    if(status === 400 && config.method === 'get' && data.errors.hasOwnProperty('id')){
         history.push('/notfound')
-        // throw error.response
     }
 
     // Handling Internal Server error
-    if(error.response.status === 500){
+    if(status === 500){
         toast.error('Server error - Please try again later')
     }
+
+    throw error.response
 })
 
 const responseBody = (response: AxiosResponse) => response.data

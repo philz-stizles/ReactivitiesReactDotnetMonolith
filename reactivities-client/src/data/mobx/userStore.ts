@@ -24,10 +24,16 @@ export default class UserStore {
         this.isSubmitting = true
         try {
             await User.register(credentials)
-            this.isSubmitting = false
+            runInAction(() => {
+                this.isSubmitting = false
+            })
+            this.rootStore.modalStore.closeModal()
+            // history.push('/activities')
         } catch (error) {
-            this.isSubmitting = false
-            console.log(error)
+            runInAction(() => {
+                this.isSubmitting = false
+            })
+            throw(error)
         }
     }
 

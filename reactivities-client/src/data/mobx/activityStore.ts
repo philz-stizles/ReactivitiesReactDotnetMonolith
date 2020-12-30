@@ -3,6 +3,7 @@ import { IActivity } from './../../models/IActivity';
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { Activities } from '../../api/agent'
 import { SyntheticEvent } from 'react';
+import { HubConnection, HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
 
 export default class ActivityStore {
     rootStore: RootStore
@@ -12,8 +13,8 @@ export default class ActivityStore {
     @observable selectedActivity: IActivity | null = null
     @observable isLoading = false
     @observable isSubmitting = false
-    // @observable editMode = false
     @observable target = ''
+    @observable.ref hubConnection: HubConnection | null = null
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore
@@ -23,6 +24,37 @@ export default class ActivityStore {
     @computed get activitiesByDate() {
         const activities: IActivity[] = Array.from(this.activitiesRegistry.values())
         return activities // .sort((a, b) => a.date!.getTime() - b.date!.getTime())
+    }
+
+    @action createHubConnection = () => {
+        this.hubConnection = new HubConnectionBuilder()
+            .withUrl('http://localhost:5000/chat', {
+                accessTokenFactory: () => this.rootStore.commonStore.token!
+            })
+            .configureLogging(LogLevel.Information)
+            .build()
+
+        this.hubConnection
+            .start()
+            .then(() => console.log(this.hubConnection?.state))
+            .catch(error => console.log('Error establishing connection', error))
+
+            this.hubConnection.on('RecieveComment', comment => {
+                this.selectedActivity!.comments.push(comment)
+            })
+    }
+
+    @action stopHubConnection = () => {
+        this.hubConnection!.stop()
+    }
+
+    @action addComment = async (values: any) => {
+        values.activityId = this.selectedActivity!.id
+        try{
+            await this.hubConnection!.invoke('SendComment', values)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     @action loadActivities = async () => {

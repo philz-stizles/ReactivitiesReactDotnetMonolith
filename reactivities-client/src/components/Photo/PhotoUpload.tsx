@@ -13,11 +13,11 @@ const PhotoUpload = () => {
                 </Grid.Column>
                 <Grid.Column width={1} />
                 <Grid.Column width={4}>
-                    <Header color='teal' sub content='Step 1 - Resize Image' />
+                    <Header color='teal' sub content='Step 2 - Resize Image' />
                 </Grid.Column>
                 <Grid.Column width={1} />
                 <Grid.Column width={4}>
-                    <Header color='teal' sub content='Step 1 - Preview & Upload' />
+                    <Header color='teal' sub content='Step 3 - Preview & Upload' />
                     {(files.length > 0) && <Image src={files[0].preview} />}
                 </Grid.Column>
             </Grid>

@@ -21,6 +21,7 @@
     "date-fns": "^2.16.1",
     "final-form": "^4.20.1",
     "globalize": "^1.6.0",
+    "jwt-decode": "^3.1.2",
     "mobx": "^6.0.3",
     "mobx-react-lite": "^3.1.5",
     "react": "^17.0.1",

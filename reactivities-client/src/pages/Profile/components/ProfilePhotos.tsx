@@ -20,7 +20,7 @@ const ProfilePhotos = () => {
                         onClick={() => (addPhotoMode) ? setAddPhotoMode(false) : setAddPhotoMode(true)}/>}
                 </Grid.Column>
                 <Grid.Column width={16}>
-                    {   (addPhotoMode) 
+                    {   (addPhotoMode) && isLoggedInUser
                         ? (
                             <PhotoUpload />
                         )

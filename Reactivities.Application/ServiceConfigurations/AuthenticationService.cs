@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.Threading.Tasks;
 
 namespace Reactivities.Application.ServiceConfigurations
@@ -26,7 +27,8 @@ namespace Reactivities.Application.ServiceConfigurations
                     ),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    // ValidateLifetime = false,
+                    ValidateLifetime = true, // If Token has expired API responds with an unauthorized
+                    ClockSkew = TimeSpan.Zero 
                     // ValidateIssuerSigningKey = true,
                     // ValidIssuer = Configuration["JwtToken:Issuer"],
                     // ValidAudience = Configuration["JwtToken:Issuer"],

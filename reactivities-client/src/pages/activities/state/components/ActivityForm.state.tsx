@@ -20,7 +20,8 @@ const ActivityFormState: React.FC<IProps> = ({ activity, onSetEditMode, onCreate
         description: '',
         date: new Date(),
         city: '',
-        venue: ''
+        venue: '',
+        comments: []
     })
 
     const handleChange = (e: FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {

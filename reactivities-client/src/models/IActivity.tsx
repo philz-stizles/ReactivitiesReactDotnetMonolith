@@ -8,7 +8,17 @@ export interface IActivity{
     category: string
     city: string
     venue: string
+    comments: IComment[]
     // attendees: IAttendee[]
+}
+
+export interface IComment{
+    id: string
+    body: string
+    username: string
+    createdAt: Date
+    displayName: string
+    image: string
 }
 
 export interface IPagedActivity {
